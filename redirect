@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+		<script>
+			var url;
+			var temp;
+			var client_id="622f961167ad4e5a091b";
+			var client_secret="10fb77459b50dac7b75c7a1da042a1be9045aefb";
+			//url = window.location.href; /* 获取完整URL */
+			//alert(url); /* http://127.0.0.1:8020/Test/index.html#test?name=test */
+		    //url = window.location.hash; /* 获取锚点（“#”后面的分段） */
+			//alert(url); /* #test?name=test */
+			url = window.location.search; /* 获取属性（“?”后面的分段） */
+			temp=url.substring(6);
+			//temp="https://github.com/login/oauth/access_token?client_id="+client_id+"&client_secret="+client_secret+"&code="+temp;
+			//window.location.href ="https://github.com/login/oauth/access_token?client_id="+client_id+"&client_secret="+client_secret+"&code="+temp;
+			window.location.href ="https://www.yyfandyy.xyz/main_student_info.jsp";
+			var result="https://github.com/login/oauth/access_token?client_id="+client_id+"&client_secret="+client_secret+"&code="+temp;
+			console.log(result);
+			
+			//var xhr=new XMLHttpRequest();
+			//xhr.open('get',result);
+			//xhr.onreadystatechange=function(){
+			//   console.log(xhr.readyState);
+			 //  if(xhr.readyState == 4)
+			 //  console.log(xhr.reponseText);
+		//	}
+		//	xhr.send();
+		</script>
+	</head>
+	<body>
+	<p>dwadawawd</p>
+	</body>
+</html>
+
+
