@@ -1,0 +1,554 @@
+﻿<html>
+	<head>
+		<title>mToken Plugin Examples</title>
+		<style type="text/css">
+			<!--  
+ 				body{text-align:center}
+ 				td {width:200px}
+			-->	
+		</style>
+		
+		<script src="js/mToken.js" type="text/javascript"></script>
+		<script src="js/base64.js" type="text/javascript"></script>
+		<script src="js/mTokenBasicOper.js" type="text/javascript"></script>
+		<script src="js/mToken_QRCode.js" type="text/javascript"></script>
+		
+	</head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<body>
+		<object id="mTokenPlugin" width="0" height="0">
+    		<param value="pluginLoaded" />
+		</object>
+		<h2>mToken基本信息
+		</h2>
+		<hr>	
+		<p>
+			<table align="center">
+				<tr>
+					<td>型号列表：</td>
+					<td >
+						<select id="platform" style="width:450px">
+							<option value="K5">K5</option>	
+							<option value="GM3000">GM3000</option>	
+							<option value="GM3000PCSC">GM3000PCSC</option>
+							<option value="K7">K7</option>		
+							<option value="TF">TF</option>
+						</select>
+					</td>
+					<td ></td>
+					<td ></td>
+					<td ></td>
+					<td ></td>
+					
+				</tr>
+				<tr>
+					<td>设备列表：</td>
+					<td >
+						<select id="sele_devices" style="width:450px">	
+						</select>
+					</td>	
+									
+					<td align="center"><input type="button" value="查找" style="width:120px" onClick="return enumDevice()"/>
+					</td>
+					
+					
+				</tr>
+				<tr>
+					<td>容器列表：</td>
+					<td>
+						<select id="sele_contentList" style="width:450px">	
+						</select>
+					</td>	
+					<td align="center"><input type="button" value="列举容器证书" style="width:120px" onClick="return getUserList()"/>
+					</td>
+				</tr>
+				<tr>
+					<td>用户密码：</td>
+					<td><input type="text" value="12345678" id="txt_pwd" name="pwd" style=" width:450px"/></td>					
+					<td align="center"><input type="button" value="登陆" style="width:120px" onClick="return verifyUserPin()"/></td>
+					<td ><label id="tryCount"></></td>
+				</tr>
+				<tr>
+					<td>修改用户密码：</td>
+					<td><input type="text" value="" id="txt_Changepwd" name="pwd" style=" width:450px"/></td>					
+					<td align="center"><input type="button" value="修改" style="width:120px" onClick="return changeUserPin()"/></td>				
+				</tr>
+               
+				<tr>
+					<td>导出指定数字证书：</td>
+					<td>
+						<textarea id="cerInfo" row="3" cols="23" style="height:80px;width:450px"></textarea>
+					</td>
+					<td align="center">
+						<select id="sele_cerType" style="width:120px">	
+							<option value="0">加密证书</option>	
+							<option value="1">签名证书</option>												
+						</select>
+					</td>
+					<td >
+						<input type="button" value="导出" style="width:120px" onClick="return exportUserCert()"/>
+					</td>
+					
+				</tr>
+				
+				<tr>
+					<td>获取证书信息：</td>
+					<td>
+						<textarea id="showcerInfo" row="30" cols="23"  style="height:80px;width:450px"></textarea>
+					</td>
+					<td align="center"><input type="button" value="获取" style="width:120px" onClick="return getCertInfo()"/></td>
+					<td></td>
+				</tr>
+				
+				<tr>
+					<td>获取设备信息：</td>
+					<td>
+						<textarea id="deviceInfo" wrap="hard" row="30" cols="60" style=" height:80px;width:450px" name="infoCer"></textarea>
+					</td>
+					<td align="center"><input type="button" value="获取" style="width:120px" onClick="return getDeviceInfo()"/></td>
+					<td></td>
+				</tr>
+				
+				
+				<tr>
+					<td>控件版本信息：</td>
+					<td>
+						<input type="text" id="contorlInfo" name="infoCer" style="width: 450px"></textarea>
+					</td>
+					<td align="center"><input type="button" value="获取" style="width:120px" onClick="return getVersion()"/></td>
+					<td></td>
+				</tr>
+				<!--
+				<tr>
+					<td>设备监控(注册之后需等待)：</td>
+					<td>
+						<input type="button" value="注册插拔事件" style="width:120px" onClick="return addDeviceEvent()"/>
+					</td>
+					<td align="center">
+						<input type="button" value="等待设备事件" style="width:120px" onClick="return beginDeviceEvent()"/>
+					</td>
+					<td>
+						<input type="button" value="取消设备监测" style="width:120px" onClick="return cancelDeviceEvent()"/>
+					</td>
+				</tr>
+				-->
+			</table>
+		</p>
+
+		<hr>
+		<h2>
+			生成二维码
+		</h2>
+		
+		<table align="center">
+			<tr>
+				<td>
+					二维码：
+				</td>
+				<td>					
+					<image id="Image_QRCode" name="Image_QRCode" src="data:image/png;base64,iVBOR"> 
+				</td>
+				<td align="center"> </td>
+				<td><input type="button" value="生成二维码" style="width:120px" onClick="return generateQRCode()"/></td>
+				
+			</tr>
+			
+		</table>
+		
+		<hr>
+		
+		<hr>
+		<h2>
+			证书使用举例
+		</h2>
+		<hr>
+		<table align="center">
+			<tr>
+				<td>
+					待签名数据：<br>
+					用户ID：<br>
+					待签名文件：
+				</td>
+				<td>					
+					<input type="text" value="12345678123456781234567812345678" id="originalData" name="data" style=" width:450px"/>
+					<input type="text" value="1234567812345678" id="userID" name="userdata" style=" width:450px"/>
+					<input type="text" value="d:\test.txt" id="signFile" name="signFile" style=" width:450px"/>
+				</td>
+				<td align="center">
+					<select id="mech" style="width:110px">
+						<option value="129">SGD_MD5</option>
+						<option value="1">SGD_SM3</option>
+						<option value="2">SGD_SHA1</option>
+						<option value="4">SGD_SHA256</option>
+						<option value="130">SGD_SHA384</option>
+						<option value="131">SGD_SHA512</option>						
+					</select>
+				</td>
+				<td><input type="button" value="签名数据" style="width:120px" onClick="return signData()"/></td>
+				<td><input type="button" value="签名数据(P7)" style="width:120px" onClick="return signData_P7()"/></td>
+				<td><input type="button" value="签名文件" style="width:120px" onClick="return signFile()"/></td>
+			</tr>
+			<tr>
+				<td>签名后结果：</td>
+				<td>
+					<textarea id="signedData" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td><input type="button" value="数据验签"style="width:120px" onClick="return verifySign()"/></td>
+				<td><input type="button" value="数据验签(P7)"style="width:120px" onClick="return verifySign_P7()"/></td>
+				<td><input type="button" value="文件验签"style="width:120px" onClick="return verifySignFile()"/></td>
+			</tr>
+			<br>
+
+			
+			<tr>
+				<td>生成随机数：</td>
+				<td>
+					<textarea id="inputrandom" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td><input type="button" value="生成随机数"style="width:120px" onClick="return myrandom()"/></td>
+			</tr>
+			
+			<tr>
+			<td>公钥数据：</td>
+				<td>
+					<textarea id="PubKey" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>非对称运算明文：</td>
+				<td>
+					<textarea id="AsymPlain" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td><input type="button" value="导出公钥"style="width:120px" onClick="return exportPubKey()"/></td>
+				<td><input type="button" value="公钥加密"style="width:120px" onClick="return encryptbyPubKey()"/></td>
+				<td><input type="button" value="私钥解密"style="width:120px" onClick="return decryptbyPrvKey()"/></td>
+				
+			</tr>
+			<tr>
+				<td>非对称运算密文：</td>
+				<td>
+					<textarea id="AsymCipher" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+			</tr>
+			<br>
+			
+			<tr>
+				<td>
+					待加密数据：<br>
+					IV:
+				</td>
+				<td>
+					<input type="text" value="12345678" id="enData" name="pwd" style=" width:450px"/>
+					<input type="text" value="1234567812345678" id="iv" name="iv" style=" width:450px"/>
+					<input type="text" value="d:\test.txt" id="enFile" name="srcFile" style=" width:450px"/>
+					<input type="text" value="d:\test.txt.cip" id="enDstFile" name="enDstFile" style=" width:450px"/>
+				</td>
+				<td align="center">
+					<select id="encrymech" style="width:120px">
+						<option value="257">SGD_SM1_ECB</option>
+						<option value="258">SGD_SM1_CBC</option>
+						<option value="260">SGD_SM1_CFB </option>
+						<option value="264">SGD_SM1_OFB</option>
+						<option value="1025">SGD_SM4_ECB </option>
+						<option value="1026">SGD_SM4_CBC</option>
+						<option value="1028">SGD_SM4_CFB</option>
+						<option value="1032">SGD_SM4_OFB</option>
+						<option value="513">SGD_SSF33_ECB</option>
+						<option value="514">SGD_SSF33_CBC</option>
+						<option value="516">SGD_SSF33_CFB</option>
+						<option value="520">SGD_SSF33_OFB</option>
+						<option value="2147484177">SGD_DES_ECB</option>
+						<option value="2147484178">SGD_DES_CBC</option>
+						<option value="2147484225">SGD_3DES168_ECB</option>
+						<option value="2147484226">SGD_3DES168_CBC</option>
+						<option value="2147484193">SGD_3DES112_ECB</option>
+						<option value="2147484194">SGD_3DES112_CBC</option>
+						<option value="2147483921">SGD_AES128_ECB</option>
+						<option value="2147483922">SGD_AES128_CBC</option>
+						<option value="2147483937">SGD_AES192_ECB</option>
+						<option value="2147483938">SGD_AES192_CBC</option>
+						<option value="2147483969">SGD_AES256_ECB</option>
+						<option value="2147483970">SGD_AES256_CBC</option>
+					</select>
+				</td>
+				<td>
+					<input type="button" value="数据加密" style="width:120px" onClick="return encryptData()"/>
+				</td>
+				<td>
+					<input type="button" value="文件加密" style="width:120px" onClick="return encryptFile()"/>
+				</td>
+			</tr>
+			<tr>
+				<td>加密后结果：</td>
+				<td>
+					<textarea id="enedData" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td>
+					<input type="button" value="数据解密"style="width:120px" onClick="return decryptData()"/>
+				</td>
+				<td>
+					<input type="button" value="文件解密"style="width:120px" onClick="return decryptFile()"/>
+				</td>
+				
+			</tr>
+			<tr>
+				<td>解密后数据:</td>
+				<td>
+					<input type="text" value="" id="deData" name="deData" style=" width:450px"/>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>待摘要数据：</td>
+				
+				<td>
+					<input type="text" value="12345678" id="digestData" name="digestData" style=" width:450px"/>
+				</td>
+				<td align="center">
+					<select id="digestmech" style="width:120px">
+						<option value="129">SGD_MD5</option>
+						<option value="1">SGD_SM3</option>
+						<option value="2">SGD_SHA1</option>
+						<option value="4">SGD_SHA256</option>
+						<option value="130">SGD_SHA384</option>
+						<option value="131">SGD_SHA512</option>
+					</select>
+					</select>
+				</td>
+				<td><input type="button" value="摘要"style="width:120px" onClick="return digestData()"/></td>
+			</tr>
+			<tr>
+				<td>摘要后结果：</td>
+				<td>
+					<textarea id="digestedData" row="3" cols="23" style=" height:80px;width:450px" name="verification"></textarea>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+			
+			<tr>
+			<td>远程解锁请求：</td>
+				<td>
+					<textarea id="remoteUnlockPin" row="3" cols="23" style=" height:80px;width:450px" name="remoteUnlockPin"></textarea>
+				</td>
+				<td></td>
+				<td><input type="button" value="生成请求" style="width:120px" onClick="return GenRemoteUnlockPin()"/></td>
+				
+				<tr></tr>
+				<td>
+				</td>
+				<tr></tr>
+				<td>
+					管理员PIN：<br>
+					用户PIN：<br>
+				</td>
+				<td>					
+					<input type="text" value="12345678" id="SoPinData" name="SoPinData" style=" width:450px"/>
+					<input type="text" value="12345678" id="newPinData" name="newPinData" style=" width:450px"/>
+				</td>
+				<td>
+				</td>
+				<td><input type="button" value="响应请求" style="width:120px" onClick="return GenUnlockPinResponse()"/></td>
+				<td><input type="button" value="解锁" style="width:120px" onClick="return RemoteUnlockPin()"/></td>
+			
+			</tr>
+			
+			<tr>
+			</tr>
+			<tr>
+				<td>
+					待加密数据：<br>
+					会话密钥（仅用于对称加解密）<br>
+					IV:
+				</td>
+				<td>
+					<input type="text" value="12345678" id="Sym_InData" name="Sym_InData" style=" width:450px"/>
+					<input type="text" value="1234567812345678" id="Sym_SessionKey" name="Sym_SessionKey" style=" width:450px"/>
+					<input type="text" value="1234567812345678" id="Sym_iv" name="Sym_iv" style=" width:450px"/>
+					<input type="text" value="d:\test.txt" id="Sym_srcFile" name="Sym_srcFile" style=" width:450px"/>
+					<input type="text" value="d:\test.txt.cip" id="Sym_DstFile" name="Sym_DstFile" style=" width:450px"/>
+					<input type="text" value="d:\test.txt..dec.cip" id="Sym_decDstFile" name="Sym_decDstFile" style=" width:450px"/>
+				</td>
+				<td align="center">
+					<select id="Sym_encrymech" style="width:120px">
+						<option value="257">SGD_SM1_ECB</option>
+						<option value="258">SGD_SM1_CBC</option>
+						<option value="260">SGD_SM1_CFB </option>
+						<option value="264">SGD_SM1_OFB</option>
+						<option value="1025">SGD_SM4_ECB </option>
+						<option value="1026">SGD_SM4_CBC</option>
+						<option value="1028">SGD_SM4_CFB</option>
+						<option value="1032">SGD_SM4_OFB</option>
+						<option value="513">SGD_SSF33_ECB</option>
+						<option value="514">SGD_SSF33_CBC</option>
+						<option value="516">SGD_SSF33_CFB</option>
+						<option value="520">SGD_SSF33_OFB</option>
+						<option value="2147484177">SGD_DES_ECB</option>
+						<option value="2147484178">SGD_DES_CBC</option>
+						<option value="2147484225">SGD_3DES168_ECB</option>
+						<option value="2147484226">SGD_3DES168_CBC</option>
+						<option value="2147484193">SGD_3DES112_ECB</option>
+						<option value="2147484194">SGD_3DES112_CBC</option>
+						<option value="2147483921">SGD_AES128_ECB</option>
+						<option value="2147483922">SGD_AES128_CBC</option>
+						<option value="2147483937">SGD_AES192_ECB</option>
+						<option value="2147483938">SGD_AES192_CBC</option>
+						<option value="2147483969">SGD_AES256_ECB</option>
+						<option value="2147483970">SGD_AES256_CBC</option>
+					</select>
+				</td>
+				<td>
+					<input type="button" value="数据对称加密" style="width:120px" onClick="return SymEncryptData()"/>
+				</td>
+				<td>
+					<input type="button" value="文件对称加密" style="width:120px" onClick="return SymEncryptFile()"/>
+				</td>
+			</tr>
+			<tr>
+				<td>加密后结果：</td>
+				<td>
+					<textarea id="Sym_enedData" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td>
+					<input type="button" value="数据对称解密"style="width:120px" onClick="return SymDecryptData()"/>
+				</td>
+				<td>
+					<input type="button" value="文件对称解密"style="width:120px" onClick="return SymDecryptFile()"/>
+				</td>
+				
+			</tr>
+			<tr>
+				<td>解密后数据:</td>
+				<td>
+					<input type="text" value="" id="Sym_deData" name="deData" style=" width:450px"/>
+				</td>
+				<td></td>
+				<td></td>
+			</tr>
+			
+		</table>	
+		
+		<hr>
+		<h2>
+			银行转账 
+		</h2>
+	
+		<hr>		
+		<table align="center">
+			<tr>
+					<td>用户密码：</td>
+					<td><input type="text" value="12345678" id="txt_pwd2" name="pwd" style=" width:450px"/></td>					
+					
+					<td ><label id="tryCount"></></td>
+				</tr>
+			<tr>
+			<td>交易报文：<br><br></td>
+			<td>
+			<textarea id="TransPacket" row="3" cols="23" style="height:260px;width:470px" ><?xml version="1.0" encoding = "utf-8"?>
+	<SignData>
+	<TradeType  name="行内转账" authLevel="0">innerTransfer </TradeType>
+	<Timestamp>12345</Timestamp>
+	<Fields>
+	<PayerAcNo name="转出账户：">6221005550400770381</PayerAcNo>
+	<PayeeAcNo name="转入账户：">6222331966476990586</PayeeAcNo>
+	<Amount name="金额：">1998.95</Amount>
+	<TranDate name="时间：">2016-03-02</TranDate>
+	<Currency name="币种：" display="人民币">156</Currency >
+	<JnlNo>xxxxxxx</JnlNo>
+	</Fields>
+	</SignData>
+</textarea>
+			</td>
+		    
+	
+			<td ></td>
+			</tr>
+			<tr>
+			<td>签名后结果：</td>
+				<td>
+					<textarea id="TransSignedData" row="3" cols="23" style="height:80px;width:470px"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td></td>
+				<td><input type="button" value="转账" style="margin: top 50px;width:200px" onClick="return myfunction()"/></td></tr>
+		</table>
+	
+	<hr>
+	<h2>
+			按键签名 
+		</h2>
+		(请确保UKey为GM3000 按键类型)
+		<hr>		
+		<table align="center">
+			<tr>
+				<td>
+					待签名数据：<br>
+					用户ID：<br>
+				</td>
+				<td>					
+					<input type="text" value="Put data to be signed here..." id="BB_originalData" name="BB_data" style=" width:450px"/>
+					<input type="text" value="1234567812345678" id="BB_userID" name="BB_userdata" style=" width:450px"/>
+				</td>
+				<td align="center">
+					<select id="BB_mech" style="width:110px">
+						<option value="2">SGD_SHA1</option>
+						<option value="4">SGD_SHA256</option>
+						<option value="130">SGD_SHA384</option>
+						<option value="131">SGD_SHA512</option>	
+						<option value="129">SGD_MD5</option>
+						<option value="1">SGD_SM3</option>						
+					</select>
+				</td>
+				<td><input type="button" value="签名数据" style="width:120px" onClick="return BB_signData()"/></td>
+				<td ></td>
+				<td ></td>
+			</tr>
+			<tr>
+				<td>签名后结果：</td>
+				<td>
+					<textarea id="BB_signedData" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td><input type="button" value="数据验签"style="width:120px" onClick="return BB_verifySign()"/></td>
+			</tr>
+			<br>
+		</table>
+		<hr>
+	
+	<h2>	文件操作 	</h2>
+	
+			<table align="center">
+			<tr>
+				<td> 文件列表</td>
+				<td>
+					<select id="sel_fileList" style="width:210px">
+					
+					</select>
+				</td>
+				<td></td>
+				<td><input type="button" value="枚举文件" style="width:120px" onClick="return btnEnumFiles()"/></td>
+				<td><input type="button" value="读文件数据" style="width:120px" onClick="return btnReadFile()"/></td>
+				<td ></td>
+				<td ></td>
+			</tr>
+			<tr>
+				<td>文件数据</td>
+				<td>
+					<textarea id="file_data" row="3" cols="23" style="height:80px;width:450px"></textarea>
+				</td>
+				<td></td>
+				<td><input type="button" value="写文件数据"style="width:120px" onClick="return btnWriteFile()"/></td>
+			</tr>
+			<br>
+		</table>
+
+	</body>
+</html>
