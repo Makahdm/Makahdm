@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>YYF的Project</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="start/style.css">
+    <link rel="shortcuticon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <header>
+        <a href="#" class="logo">Makahdm</a>
+        <div class="righSide">
+            <div class="btns dayNight">
+                <ion-icon name="moon"></ion-icon>
+                <ion-icon name="sunny"></ion-icon>
+            </div>
+            <div class="btns menuTooggle">
+                <ion-icon name="menu"></ion-icon>
+                <ion-icon name="close"></ion-icon>
+            </div>
+        </div>
+    </header>
+
+    <section class="main">
+        
+    </section>
+    
+    <ul class="navigation">
+        <li><a href="start/project.html">MyProject</a></li>
+        <li><a href="https://inftab.com/">Search</a></li>
+        <li><a href="https://120.26.195.39:8888/">Manage</a></li>
+        <li><a href="#">Contact</a></li>
+        <li style="position: absolute;left: 80px;top: 650px;font-size:10px"><a href="https://beian.miit.gov.cn">浙ICP备2022002336</a></li>
+    </ul>
+
+  
+
+    <script>
+        let dayNight=document.querySelector('.dayNight')
+        let menuTooggle =document.querySelector('.menuTooggle')
+        let body =document.querySelector('body')
+        let navigation =document.querySelector('.navigation')
+
+            menuTooggle.classList.toggle('active')
+            navigation.classList.toggle('active')
+        dayNight.onclick=function(){
+            body.classList.toggle('dark')
+            dayNight.classList.toggle('active')
+        }
+      
+        menuTooggle.onclick=function(){
+            menuTooggle.classList.toggle('active')
+            navigation.classList.toggle('active')
+        }
+
+    </script>
+    <script src="https://unpkg.com/ionicons@4.5.10-0/dist/ionicons.js"></script>
+   
+    
+</body>
+
+</html>
